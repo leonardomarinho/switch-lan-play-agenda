@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  switch-lan-play-api:
+    image: node:14-alpine
+    container_name: switch-lan-play-api
+    command: sh -c "npm install && npm run start:debug"
+    working_dir: /app
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+    networks: 
+      - switch-lan-play
+
+  switch-lan-play-db:
+    container_name: switch-lan-play-db
+    image: postgres:11.4
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - switch-lan-play
+
+networks:
+  switch-lan-play:
+    name: switch-lan-play
+    driver: bridge
